@@ -77,6 +77,95 @@ done
 
 ![2](https://github.com/najm-h/Alzheimer/assets/147291760/4085cbf7-14b4-4b97-85e0-3a4295aea7e4)
 
+#3 Step. Splitting dataset for training and Validation and Testing
+#   20% split to validation and 80% split to train set
+X_train, x_val, y_train, y_val = train_test_split(X,y, test_size = 0.2)
 
+#   20% split to test from 80% of train and 60% remains in train set
+X_train, x_test, y_train, y_test = train_test_split(X_train,y_train, test_size = 0.2)
+
+# Number of samples after train test split
+print("Number of samples after splitting into Training, validation & test set\n")
+
+print("Train     \t",sorted(Counter(np.argmax(y_train, axis=1)).items()))
+print("Validation\t",sorted(Counter(np.argmax(y_val, axis=1)).items()))
+print("Test      \t",sorted(Counter(np.argmax(y_test, axis=1)).items()))
+# 4 Step. Features Extraction 
+
+
+import tensorflow as tf
+from tensorflow.keras.layers import Layer
+from tensorflow.keras.layers import GlobalAveragePooling2D
+from tensorflow.keras.layers import Dense
+
+class ChannelAttention(Layer):
+    def __init__(self, d_model, ratio, **kwargs):
+        super(ChannelAttention, self).__init__(**kwargs)
+        self.d_model = d_model
+        self.ratio = ratio
+        
+        self.global_avg_pool = GlobalAveragePooling2D()
+        self.dense1 = Dense(units = d_model//ratio, activation = 'relu')
+        self.dense2 = Dense(units = d_model, activation = 'sigmoid')
+    
+    def build(self, input_shape):
+        super(ChannelAttention, self).build(input_shape)
+
+    def call(self, inputs):
+        avg_pool = self.global_avg_pool(inputs)
+        dense1 = self.dense1(avg_pool)
+        dense2 = self.dense2(dense1)
+        dense2 = tf.reshape(dense2, [-1, 1, 1, self.d_model])
+        return inputs * dense2
+    
+
+
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Input, Conv2D, ReLU, AveragePooling2D, Dropout, Flatten, Dense, Softmax
+from tensorflow.keras.initializers import GlorotUniform
+
+# Define your model
+init = GlorotUniform()
+model = Sequential()
+
+# Add layers to your model
+model.add(Input(shape=(M, N, 3)))
+
+model.add(Conv2D(16, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Conv2D(32, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Conv2D(64, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Conv2D(128, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Conv2D(256, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+# Channel attention
+model.add(ChannelAttention(256, 5))
+model.add(Dropout(0.01))
+model.add(Flatten())
+
+model.add(Dense(256, kernel_initializer=init))
+model.add(ReLU())
+model.add(Dropout(0.03))
+
+model.add(Dense(4, kernel_initializer=init))
+model.add(Softmax())
+
+
+# Print model summary
+model.summary()
 
 
