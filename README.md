@@ -123,11 +123,11 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Conv2D, ReLU, AveragePooling2D, Dropout, Flatten, Dense, Softmax
 from tensorflow.keras.initializers import GlorotUniform
 
-# Define your model
+#  model
 init = GlorotUniform()
 model = Sequential()
 
-# Add layers to your model
+
 model.add(Input(shape=(M, N, 3)))
 
 model.add(Conv2D(16, 5, kernel_initializer=init))
@@ -149,7 +149,6 @@ model.add(AveragePooling2D(pool_size=(2,2)))
 model.add(Conv2D(256, 5, kernel_initializer=init))
 model.add(ReLU())
 model.add(AveragePooling2D(pool_size=(2,2)))
-# Channel attention
 model.add(ChannelAttention(256, 5))
 model.add(Dropout(0.01))
 model.add(Flatten())
