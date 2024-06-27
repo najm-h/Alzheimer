@@ -33,10 +33,7 @@ done
 
 
 conda activate med2image
-## Step2: Convert nii to jpg    This will produce one
-https://www.onlineconverter.com/nifti-to-jpg
-
-# Converted to X axial, Y sagital, Z coronal
+## Step2:  Converted to X axial, Y sagital, Z coronal
 ## clone the below github project https://github.com/FNNDSC/med2image
 
 
