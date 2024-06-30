@@ -2,13 +2,14 @@
 
 ## Dataset:
 Please download the dataset from below link:
-
+For ADNI
 https://adni.loni.usc.edu/
+For MIRIAD 
  https://www.ucl.ac.uk/drc/research-clinical-trials/minimal-interval-resonance-imaging-alzheimers-disease-miriad.
 
 ## Step1: download
 source ~/anaconda3/etc/profile.d/conda.sh
-##step2: categorize CSV file into subject AD, CN, MCI using below code.
+##step2: categorize CSV file into subject AD, CN, MCI using below code. 
 
 
 for f in $(find . -type f -name *.nii)
