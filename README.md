@@ -28,6 +28,7 @@ Standardized Lists:
     Click on the link you wish to download (either ADNI 1.5T MRI Standardized Lists or ADNI 3T MRI Standardized Lists)
     Download to an appropriately named location on your computer system (i.e. ADNI_3T_MRI_Standardized_Lists)
 
+![image](https://github.com/najm-h/Alzheimer/assets/147291760/dbc40566-c4cb-4954-b931-6e8e7863ecc2)
 
  
 
