@@ -4,6 +4,7 @@
 Please download the dataset from below link:
 
 https://adni.loni.usc.edu/
+ https://www.ucl.ac.uk/drc/research-clinical-trials/minimal-interval-resonance-imaging-alzheimers-disease-miriad.
 
 ## Step1: download
 source ~/anaconda3/etc/profile.d/conda.sh
@@ -67,10 +68,6 @@ do
 
 	med2image -i $f -d $directory_to --reslice
 done
-
-
-
-  
 
 ![2](https://github.com/najm-h/Alzheimer/assets/147291760/4085cbf7-14b4-4b97-85e0-3a4295aea7e4)
 
@@ -146,7 +143,7 @@ model.add(AveragePooling2D(pool_size=(2,2)))
 model.add(Conv2D(256, 5, kernel_initializer=init))
 model.add(ReLU())
 model.add(AveragePooling2D(pool_size=(2,2)))
-model.add(ChannelAttention(256, 5))
+#############model.add(ChannelAttention(256, 5))############
 model.add(Dropout(0.01))
 model.add(Flatten())
 
@@ -154,7 +151,7 @@ model.add(Dense(256, kernel_initializer=init))
 model.add(ReLU())
 model.add(Dropout(0.03))
 
-model.add(Dense(4, kernel_initializer=init))
+model.add(Dense(N, kernel_initializer=init))
 model.add(Softmax())
 
 
