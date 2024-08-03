@@ -115,7 +115,7 @@ done
 ![2](https://github.com/najm-h/Alzheimer/assets/147291760/4085cbf7-14b4-4b97-85e0-3a4295aea7e4)
 
 #3 Step. Splitting dataset for training and Validation and Testing
-#   20% split to test from 80% of train and 60% remains in train set
+
 X_train, x_test, y_train, y_test = train_test_split(X_train,y_train, test_size = 0.2)
 
 # Number of samples after train test split
