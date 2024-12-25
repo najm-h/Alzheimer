@@ -69,18 +69,21 @@ do
 done
 
 
-conda activate med2image
+
 ## Step2: Convert nii to jpg    This will produce one
-https://www.onlineconverter.com/nifti-to-jpg
+###python code: conda activate med2image  run convert.sh path,    throw terminal    
+###Online: https://www.onlineconverter.com/nifti-to-jpg
 
 # Converted to X axial, Y sagital, Z coronal
 ## clone the below github project https://github.com/FNNDSC/med2image
+###https://github.com/FNNDSC/med2image/blob/master/med2image/med2image.py
+
 
 
 ## Activate conda environtment the environtment
 conda activate med2image
 ### load IDs or MRI image from file name
-make below code a **run_convert.sh**  save it and run it. 
+make below code a **run_convert.sh**  save it and run it.  
 
 #!/bin/bash
 #
