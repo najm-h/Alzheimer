@@ -166,6 +166,93 @@ print("Train     \t",sorted(Counter(np.argmax(y_train, axis=1)).items()))
 print("Validation\t",sorted(Counter(np.argmax(y_val, axis=1)).items()))
 print("Test      \t",sorted(Counter(np.argmax(y_test, axis=1)).items()))
 # 4 Step. Features Extraction 
+#Channel attention
 
+import tensorflow as tf
+from tensorflow.keras.layers import Layer
+from tensorflow.keras.layers import GlobalAveragePooling2D
+from tensorflow.keras.layers import Dense
+
+class ChannelAttention(Layer):
+    def __init__(self, d_model, ratio, **kwargs):
+        super(ChannelAttention, self).__init__(**kwargs)
+        self.d_model = d_model
+        self.ratio = ratio
+        
+        self.global_avg_pool = GlobalAveragePooling2D()
+        self.dense1 = Dense(units = d_model//ratio, activation = 'relu')
+        self.dense2 = Dense(units = d_model, activation = 'sigmoid')
+    
+    def build(self, input_shape):
+        super(ChannelAttention, self).build(input_shape)
+
+    def call(self, inputs):
+        avg_pool = self.global_avg_pool(inputs)
+        dense1 = self.dense1(avg_pool)
+        dense2 = self.dense2(dense1)
+        dense2 = tf.reshape(dense2, [-1, 1, 1, self.d_model])
+        return inputs * dense2
+    
+#Stack CNN
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Input, Convolution2D, ReLU, AveragePooling2D,  Dropout, Flatten, Dense, Softmax
+
+
+
+model = Sequential()
+
+model.add(Input(shape=(256, 256, 3)))
+
+model.add(Convolution2D(16, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Convolution2D(32, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Convolution2D(64, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Convolution2D(128, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(Convolution2D(256, 5, kernel_initializer=init))
+model.add(ReLU())
+model.add(AveragePooling2D(pool_size=(2,2)))
+
+model.add(ChannelAttention(256, 5))
+
+model.add(Dropout(0.01))
+
+model.add(Flatten())
+
+model.add(Dense(256, kernel_initializer=init))
+model.add(ReLU())
+model.add(Dropout(0.03))
+
+model.add(Dense(4, kernel_initializer=init))
+model.add(Softmax())
+
+# Count the number of parameters
+params_count = model.count_params()
+print("Total number of parameters:", params_count)
+
+# Print model summary
+model.summary()
+# compile the Model
+### Model Compilation
+model.compile(
+    optimizer=SGD(learning_rate=0.01), 
+    loss = tf.keras.losses.CategoricalCrossentropy(name='loss'), 
+    metrics=[
+        tf.keras.metrics.CategoricalAccuracy(name='acc'), 
+        tf.keras.metrics.AUC(name='auc'),
+        #tfa.metrics.F1Score(num_classes=2),
+        tf.metrics.Precision(name="precision"),
+        tf.metrics.Recall(name="recall") ])
 
 
